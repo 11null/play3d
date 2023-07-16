@@ -1,5 +1,5 @@
 import './style.css'
-import {GameView} from './lib/game-view'
+import { ShapeEditor } from './lib/editor/shape-editor'
 
-const v= new GameView()
-v.test()
+const v= new ShapeEditor()
+v.create()

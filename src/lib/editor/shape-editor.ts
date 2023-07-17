@@ -5,6 +5,12 @@ import { ShapeType } from "./shape-type";
 import { CreateSphere } from "./shapes/sphere";
 import { CreateBox } from "./shapes/box";
 import { CreateCircle } from "./shapes/circle";
+import { CreateCone } from "./shapes/cone";
+import { CreateCylinder } from "./shapes/cylinder";
+import { CreateDodecahedron } from "./shapes/dodecahedron";
+import { CreateIcosahedron } from "./shapes/icosahedron";
+import { CreateOctahedron } from "./shapes/octahedron";
+import { CreateEdges } from "./shapes/edges";
 
 export class ShapeEditor extends GameView {
     gui = new GUI();
@@ -12,8 +18,14 @@ export class ShapeEditor extends GameView {
     shapes: ShapeType[] = [
         new CreateBox(),
         new CreateSphere(),
-        new CreateCircle()
+        new CreateCircle(),
+        new CreateCone(),
+        new CreateCylinder(),
+        new CreateDodecahedron(),
+        new CreateIcosahedron(),
+        new CreateOctahedron(),
     ]
+    edges = new CreateEdges()
     shape = 0
     mesh : THREE.Mesh = new THREE.Mesh(this.shapes[this.shape].build(this.args(this.shape)),new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true }))
 
@@ -22,7 +34,7 @@ export class ShapeEditor extends GameView {
         this.render()
     }
 
-    args(shape:number) : Record<string,number> {
+    args(shape:number) : Record<string,number|boolean|any> {
         if (!this._args[shape]) this._args[shape] = {}
         return this._args[shape]
     }
@@ -58,11 +70,11 @@ export class ShapeEditor extends GameView {
             const shape = this.shapes[n]
             for (let k in shape.params) {
                 this.args(n)[k] = shape.params[k].val
-                f.add(this.args(n),k,shape.params[k].min,shape.params[k].max).onChange(this.refresh)
+                f.add(this.args(n),k,shape.params[k].min,shape.params[k].max,shape.params[k].step).onChange(this.refresh)
             }
             
         }
-        
+        f1 = this.gui.addFolder("Edges")
         
         this.refresh()
     }
